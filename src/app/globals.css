@@ -1,26 +1,178 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ITOMA palette — 生成り / 墨 / 柿渋 / 苔 */
+  --color-kinari: #f2ede4;
+  --color-paper: #f8f5ef;
+  --color-ink: #23201c;
+  --color-sumi: #4a453e;
+  --color-mute: #8a8278;
+  --color-line: #d9d1c4;
+  --color-kaki: #9a5b3f;
+  --color-moss: #6f7458;
+
+  /* Hub palette */
+  --color-bone: #f7f6f2;
+  --color-coal: #151515;
+  --color-ash: #77746d;
+  --color-signal: #d2482b;
+
+  --font-mincho: var(--font-shippori), "Hiragino Mincho ProN", serif;
+  --font-gothic: var(--font-zen), "Hiragino Sans", sans-serif;
+  --font-roman: var(--font-cormorant), "Times New Roman", serif;
+  --font-grotesk: var(--font-inter-tight), "Helvetica Neue", sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-feature-settings: "palt";
+}
+
+.vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* 数字：ゴシックの等幅。価格・日付・数量に使う */
+.num {
+  font-family: var(--font-gothic);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.tracking-jp {
+  letter-spacing: 0.12em;
+}
+
+/* 紙の質感：ごく薄いノイズ */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.25  0 0 0 0 0.2  0 0 0 .08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* 西陣織の経糸をイメージした縞 */
+.warp {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-kaki) 0 2px,
+    transparent 2px 9px,
+    var(--color-moss) 9px 10px,
+    transparent 10px 17px
+  );
+}
+
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details[open] .plus {
+  transform: rotate(45deg);
+}
+
+.link-u {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s ease;
+}
+.link-u:hover {
+  background-size: 100% 1px;
+}
+
+/* ---------- Motion ---------- */
+
+/* JSが動く環境だけ、アニメーション対象を最初は隠す（ちらつき防止） */
+html.js [data-split],
+html.js [data-reveal],
+html.js [data-stagger] {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-split],
+  html.js [data-reveal],
+  html.js [data-stagger] {
+    visibility: visible;
+  }
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.marquee {
+  animation: marquee linear infinite;
+}
+.group:hover .marquee {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes bump {
+  50% {
+    scale: 1.35;
+  }
+}
+
+/* プリローダーは一度見たら出さない */
+html[data-intro="done"] .preloader {
+  display: none;
+}
+
+/* ページ遷移：ヘッダーは固定、本文はふわっと入れ替える */
+::view-transition-group(site-header) {
+  animation: none;
+}
+::view-transition-old(root) {
+  animation: 300ms ease-in both vt-fade reverse;
+}
+::view-transition-new(root) {
+  animation: 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms both vt-rise;
+}
+::view-transition-group(*.morph) {
+  animation-duration: 700ms;
+  animation-timing-function: cubic-bezier(0.7, 0, 0.2, 1);
+}
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes vt-rise {
+  from {
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
 }
