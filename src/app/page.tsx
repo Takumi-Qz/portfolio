@@ -124,7 +124,10 @@ export default function Home() {
                     </p>
                   </div>
                 ),
-                preview: live ? (
+                preview: w.cover ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={w.cover} alt="" className="h-full w-full object-cover" />
+                ) : live ? (
                   <ProductArt art={getProduct("hodoku-oil")!.art} name="ITOMA" id={`work-${w.no}`} view="top" />
                 ) : (
                   <div className="grid h-full w-full place-items-center bg-[repeating-linear-gradient(135deg,#e6e6e1_0_12px,#dcdcd5_12px_24px)] text-xs uppercase tracking-[0.3em] text-ash">

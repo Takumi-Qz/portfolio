@@ -17,6 +17,13 @@
   --color-ash: #77746d;
   --color-signal: #d2482b;
 
+  /* ほとり palette — 墨緑 / 薪火 / 生成り / 霧 */
+  --color-moku: #1e2a25;
+  --color-moku-deep: #141c18;
+  --color-hi: #d9772b;
+  --color-yuki: #ede8df;
+  --color-kiri: #93a098;
+
   --font-mincho: var(--font-shippori), "Hiragino Mincho ProN", serif;
   --font-gothic: var(--font-zen), "Hiragino Sans", sans-serif;
   --font-roman: var(--font-cormorant), "Times New Roman", serif;
@@ -174,5 +181,34 @@ html[data-intro="done"] .preloader {
   *::after {
     transition: none !important;
     animation: none !important;
+  }
+}
+
+/* ほとり：ヒーロー写真の上を流れる湯気 */
+.steam {
+  background:
+    radial-gradient(40% 30% at 30% 60%, rgb(237 232 223 / 0.22), transparent 70%),
+    radial-gradient(30% 25% at 70% 40%, rgb(237 232 223 / 0.16), transparent 70%);
+  filter: blur(30px);
+  animation: steam 14s ease-in-out infinite alternate;
+}
+@keyframes steam {
+  from {
+    transform: translate3d(-4%, 6%, 0) scale(1);
+    opacity: 0.6;
+  }
+  to {
+    transform: translate3d(5%, -8%, 0) scale(1.15);
+    opacity: 1;
+  }
+}
+
+.hero-zoom {
+  animation: hero-zoom 3.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.14);
+    filter: brightness(0.4);
   }
 }

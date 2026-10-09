@@ -18,7 +18,7 @@ const shippori = Shippori_Mincho({
 
 const zen = Zen_Kaku_Gothic_New({
   variable: "--font-zen",
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "700", "900"],
   subsets: ["latin"],
   preload: false,
 });

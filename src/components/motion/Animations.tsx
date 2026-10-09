@@ -13,6 +13,10 @@ import { gsap, prefersReduced, ScrollTrigger, SplitText, useGSAP } from "@/lib/g
  *  data-speed="0.2"   … スクロールに合わせた視差
  *  data-count         … 数字をカウントアップ
  */
+// once: true だと、表示済みの要素のトリガーが refresh 中に自分を消してしまい、
+// 後から作るトリガーで ScrollTrigger が落ちることがある。一度だけ再生して残しておく
+const PLAY_ONCE = "play none none none";
+
 export function Animations() {
   const pathname = usePathname();
 
@@ -47,7 +51,7 @@ export function Animations() {
                     ease: "power2.out",
                     stagger: 0.07,
                     delay: Number(el.dataset.delay ?? 0),
-                    scrollTrigger: { trigger: el, start: "top 88%", once: true },
+                    scrollTrigger: { trigger: el, start: "top 88%", toggleActions: PLAY_ONCE },
                   })
                 : gsap.from(self.lines, {
                     yPercent: 110,
@@ -55,7 +59,7 @@ export function Animations() {
                     ease: "expo.out",
                     stagger: 0.09,
                     delay: Number(el.dataset.delay ?? 0),
-                    scrollTrigger: { trigger: el, start: "top 88%", once: true },
+                    scrollTrigger: { trigger: el, start: "top 88%", toggleActions: PLAY_ONCE },
                   }),
           });
         });
@@ -70,13 +74,13 @@ export function Animations() {
               duration: 1.2,
               ease: "power3.out",
               delay: Number(el.dataset.delay ?? 0),
-              scrollTrigger: { trigger: el, start: "top 90%", once: true },
+              scrollTrigger: { trigger: el, start: "top 90%", toggleActions: PLAY_ONCE },
             },
           ),
         );
 
         q("[data-reveal='clip']").forEach((el) => {
-          const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 85%", once: true } });
+          const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 85%", toggleActions: PLAY_ONCE } });
           tl.set(el, { autoAlpha: 1 })
             .fromTo(el, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.6, ease: "expo.inOut" })
             .from(el.firstElementChild, { scale: 1.25, duration: 2, ease: "expo.out" }, "<0.2");
@@ -90,7 +94,7 @@ export function Animations() {
             duration: 1,
             ease: "power3.out",
             stagger: 0.1,
-            scrollTrigger: { trigger: el, start: "top 88%", once: true },
+            scrollTrigger: { trigger: el, start: "top 88%", toggleActions: PLAY_ONCE },
           });
         });
 
@@ -103,14 +107,15 @@ export function Animations() {
         );
 
         q("[data-count]").forEach((el) => {
-          const to = Number(el.textContent);
+          // 再実行（開発時の StrictMode やページ遷移）で途中の数字を読まないよう、最初の値を覚えておく
+          const to = Number((el.dataset.countTo ??= el.textContent ?? "0"));
           const obj = { v: 0 };
           gsap.to(obj, {
             v: to,
             duration: 1.8,
             ease: "power2.out",
             onUpdate: () => (el.textContent = String(Math.round(obj.v))),
-            scrollTrigger: { trigger: el, start: "top 92%", once: true },
+            scrollTrigger: { trigger: el, start: "top 92%", toggleActions: PLAY_ONCE },
           });
         });
 
