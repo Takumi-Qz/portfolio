@@ -12,6 +12,7 @@ import { gsap, prefersReduced, ScrollTrigger, SplitText, useGSAP } from "@/lib/g
  *  data-stagger       … 子要素を順番にフェードイン
  *  data-speed="0.2"   … スクロールに合わせた視差
  *  data-count         … 数字をカウントアップ
+ *  data-draw          … 中の SVG の線（pathLength="1"）を引き、[data-line] を伸ばす
  */
 // once: true だと、表示済みの要素のトリガーが refresh 中に自分を消してしまい、
 // 後から作るトリガーで ScrollTrigger が落ちることがある。一度だけ再生して残しておく
@@ -27,6 +28,8 @@ export function Animations() {
 
       if (prefersReduced()) {
         gsap.set(all, { autoAlpha: 1 });
+        gsap.set(q("[data-draw] path,[data-draw] line"), { strokeDashoffset: 0 });
+        gsap.set(q("[data-draw] [data-line]"), { scale: 1 });
         return;
       }
 
@@ -105,6 +108,18 @@ export function Animations() {
             scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
           }),
         );
+
+        q("[data-draw]").forEach((el) => {
+          const tl = gsap.timeline({
+            delay: Number(el.dataset.delay ?? 0),
+            defaults: { duration: 1.4, ease: "expo.inOut", stagger: 0.12 },
+            scrollTrigger: { trigger: el, start: "top 90%", toggleActions: PLAY_ONCE },
+          });
+          const paths = el.querySelectorAll("path,line");
+          const lines = el.querySelectorAll("[data-line]");
+          if (paths.length) tl.to(paths, { strokeDashoffset: 0 }, 0);
+          if (lines.length) tl.to(lines, { scale: 1 }, 0);
+        });
 
         q("[data-count]").forEach((el) => {
           // 再実行（開発時の StrictMode やページ遷移）で途中の数字を読まないよう、最初の値を覚えておく

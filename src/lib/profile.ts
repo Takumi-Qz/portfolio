@@ -36,12 +36,14 @@ export const works: Work[] = [
   },
   {
     no: "02",
-    title: "Corporate Site",
+    title: "岡部製作所",
     kind: "Corporate",
     stack: "Next.js",
     year: "2026",
-    summary: "準備中",
-    swatch: ["#e6e6e1", "#c9c9c2", "#a8a8a0"],
+    href: "/works/okabe",
+    summary: "東大阪の精密切削加工の町工場（架空）のコーポレートサイト。全6ページ、加工実績の絞り込み、図面添付つき見積りフォーム。",
+    swatch: ["#e9e9e5", "#15171a", "#5c6267", "#d48a1c"],
+    cover: asset("/works/okabe/hero.webp"),
   },
   {
     no: "03",

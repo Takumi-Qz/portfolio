@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import {
   Cormorant_Garamond,
+  IBM_Plex_Mono,
+  IBM_Plex_Sans_JP,
   Inter_Tight,
   Shippori_Mincho,
   Zen_Kaku_Gothic_New,
@@ -35,6 +37,20 @@ const interTight = Inter_Tight({
   subsets: ["latin"],
 });
 
+const plexJp = IBM_Plex_Sans_JP({
+  variable: "--font-plex-jp",
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+  preload: false,
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  weight: ["400", "500"],
+  subsets: ["latin"],
+  preload: false,
+});
+
 export const metadata: Metadata = {
   title: {
     default: "Portfolio — EC・HP・LP制作",
@@ -48,7 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="ja"
       suppressHydrationWarning
-      className={`${shippori.variable} ${zen.variable} ${cormorant.variable} ${interTight.variable} h-full antialiased`}
+      className={`${shippori.variable} ${zen.variable} ${cormorant.variable} ${interTight.variable} ${plexJp.variable} ${plexMono.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />

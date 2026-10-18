@@ -24,10 +24,21 @@
   --color-yuki: #ede8df;
   --color-kiri: #93a098;
 
+  /* 岡部製作所 palette — 定盤 / 鉄 / 鋼 / 切削油 */
+  --color-ban: #e9e9e5;
+  --color-ban-hi: #f4f4f1;
+  --color-tetsu: #15171a;
+  --color-tetsu-2: #202327;
+  --color-hagane: #5c6267;
+  --color-sen: #c5c7c2;
+  --color-abura: #d48a1c;
+
   --font-mincho: var(--font-shippori), "Hiragino Mincho ProN", serif;
   --font-gothic: var(--font-zen), "Hiragino Sans", sans-serif;
   --font-roman: var(--font-cormorant), "Times New Roman", serif;
   --font-grotesk: var(--font-inter-tight), "Helvetica Neue", sans-serif;
+  --font-plex: var(--font-plex-jp), "Hiragino Sans", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 html {
@@ -210,5 +221,45 @@ html[data-intro="done"] .preloader {
   from {
     transform: scale(1.14);
     filter: brightness(0.4);
+  }
+}
+
+/* 岡部製作所：定規の目盛り（1mm刻み、5mm・10mmで長く） */
+.ruler {
+  height: 12px;
+  background:
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 50px) 0 0 / 100% 12px no-repeat,
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 25px) 0 0 / 100% 8px no-repeat,
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 5px) 0 0 / 100% 4px no-repeat;
+  opacity: 0.45;
+}
+
+/* 方眼（図面の下書き用紙） */
+.grid-paper {
+  background-image:
+    linear-gradient(rgb(21 23 26 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(21 23 26 / 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* JSが動く環境だけ、線を描く要素を最初は隠す */
+html.js [data-draw] path,
+html.js [data-draw] line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+html.js [data-draw] [data-line] {
+  transform: scaleX(0);
+}
+html.js [data-draw] [data-line="y"] {
+  transform: scaleY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-draw] path,
+  html.js [data-draw] line {
+    stroke-dashoffset: 0;
+  }
+  html.js [data-draw] [data-line] {
+    transform: none;
   }
 }
